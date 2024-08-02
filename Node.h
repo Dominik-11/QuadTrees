@@ -17,9 +17,10 @@ public:
 
 	Vector2f location;
 
+	CircleShape visualNode;
+
 protected:
 
-	CircleShape visualNode;
 
 };
 

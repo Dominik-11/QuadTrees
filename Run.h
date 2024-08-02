@@ -31,6 +31,8 @@ public:
 
 	void addNode(Vector2f pos);
 
+	void mousePressed(Vector2f location);
+
 protected:
 	//Int8 switchways = 1;
 	//Int16 speed = 1;

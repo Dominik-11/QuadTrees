@@ -1,7 +1,7 @@
 #include "Run.h"
 #include <iostream>
 
-Run::Run() : quadtree(Vector2f(10, 10), Vector2f(700, 700), 2)
+Run::Run() : quadtree(Vector2f(10, 10), Vector2f(700, 700), 1)
 {
 }
 
@@ -28,6 +28,8 @@ void Run::init(RenderWindow& win)
 	addNode(Vector2f(410, 410));
 	addNode(Vector2f(80, 710));
 	addNode(Vector2f(780, 210));
+
+
 }
 
 void Run::tick(float DeltaTime)
@@ -54,10 +56,10 @@ void Run::render(RenderWindow& win)
 
 	if (headNode) {
 		MasterNodeLList* tempNode = headNode;
-		while (tempNode) {
+		do {
 			tempNode->node.render(win);
 			tempNode = tempNode->next;
-		}
+		} while (tempNode);
 	}
 
 }
@@ -86,4 +88,9 @@ void Run::addNode(Vector2f pos)
 
 	quadtree.addNode(newLLNode->node);
 
+}
+
+void Run::mousePressed(Vector2f location)
+{
+	addNode(location);
 }

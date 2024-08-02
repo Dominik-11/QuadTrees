@@ -17,8 +17,14 @@ int main() {
 
 	while (window.isOpen()) {
 		while (window.pollEvent(e)) {
-			if (e.type == Event::Closed) {
+
+			switch (e.type) {
+			case Event::Closed:
 				window.close();
+				return 0;
+			case Event::MouseButtonPressed:
+				run.mousePressed(Vector2f(e.mouseButton.x, e.mouseButton.y));
+				break;
 			}
 		}
 
