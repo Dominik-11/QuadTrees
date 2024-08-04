@@ -7,14 +7,21 @@ Node::Node(Vector2f loc)
 	visualNode.setRadius(4.f);
 	visualNode.setPosition(loc);
 	visualNode.setFillColor(Color::Black);
+
+
 }
 
 void Node::init()
 {
+
 }
 
 void Node::tick()
 {
+	//start with random angle
+
+
+
 }
 
 void Node::render(RenderWindow& window)

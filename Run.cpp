@@ -19,15 +19,15 @@ void Run::init(RenderWindow& win)
 
 	//std::cout << "bloody something!\n";
 
-	addNode(Vector2f(300, 200));
-	addNode(Vector2f(400, 400));
-	addNode(Vector2f(70, 770));
-	addNode(Vector2f(770, 200));
+	//addNode(Vector2f(300, 200));
+	//addNode(Vector2f(400, 400));
+	//addNode(Vector2f(70, 770));
+	//addNode(Vector2f(770, 200));
 
-	addNode(Vector2f(310, 210));
-	addNode(Vector2f(410, 410));
-	addNode(Vector2f(80, 710));
-	addNode(Vector2f(780, 210));
+	//addNode(Vector2f(310, 210));
+	//addNode(Vector2f(410, 410));
+	//addNode(Vector2f(80, 710));
+	//addNode(Vector2f(780, 210));
 
 
 }

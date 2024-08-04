@@ -43,7 +43,7 @@ void QuadTree::setBoundary(Vector2f loc, Vector2f size)
 
 void QuadTree::addNode(Node & newNode)
 {
-	//std::cout << "quadtree add node called\n";
+	std::cout << "add node\n";
 
 	if (!boundary.contains(newNode.location)) {
 		return;
@@ -64,7 +64,7 @@ void QuadTree::addNode(Node & newNode)
 
 	NodeLList* temp = headNode;
 
-	int LCount = 1;
+	int LCount = 2;
 	while (temp->next) {
 		temp = temp->next;
 		LCount++;
@@ -74,8 +74,16 @@ void QuadTree::addNode(Node & newNode)
 
 		std::cout << "count was " << LCount << "\n";
 
-
 		subdivide();
+
+		NodeLList* temp = headNode;
+		while (temp) {
+			addNodeToSubdivision(temp->node);
+			temp = temp->next;
+		}
+		headNode->~NodeLList();
+		headNode = nullptr;
+
 		addNodeToSubdivision(newNode);
 		return;
 	}
@@ -112,8 +120,7 @@ void QuadTree::addNodeToSubdivision(Node& newNode)
 		return;
 	}
 
-	std::cout << "added to body\n";
-
+	std::cout << "added to subtree\n";
 
 	northWest->addNode(newNode);
 	northEast->addNode(newNode);
