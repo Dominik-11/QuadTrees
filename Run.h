@@ -3,19 +3,24 @@
 #include "SFML/Graphics.hpp"
 #include "QuadTree.h"
 #include "Node.h"
+#include "BouncingNode.h"
 
 using namespace sf;
 
 struct MasterNodeLList {
-	Node node;
+	Node* node;
 	MasterNodeLList* next = nullptr;
 
-	MasterNodeLList(Node newNode) : node(newNode) {}
+	MasterNodeLList(Node* newNode) : node(newNode) {}
 
 	~MasterNodeLList() {
-		delete next;
+		delete next, node;
 	}
 };
+
+//struct MaterListtwo : public MasterNodeLList {
+//
+//};
 
 class Run
 {
@@ -31,6 +36,8 @@ public:
 
 	void addNode(Vector2f pos);
 
+	void addBouncingNode(Vector2f pos);
+
 	void mousePressed(Vector2f location);
 
 protected:
@@ -40,6 +47,8 @@ protected:
 
 	QuadTree quadtree;
 	MasterNodeLList* headNode = nullptr;
+
+	Node* nodes[];
 
 };
 

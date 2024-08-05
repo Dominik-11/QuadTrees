@@ -29,11 +29,20 @@ void Run::init(RenderWindow& win)
 	//addNode(Vector2f(80, 710));
 	//addNode(Vector2f(780, 210));
 
-
+	//addBouncingNode(Vector2f(780, 210));
 }
 
 void Run::tick(float DeltaTime)
 {
+
+	MasterNodeLList* temp = headNode;
+
+	//theres an issue you shouldnt access a child from the parent. i want some kind of ability to call the right tick depending on the class
+	while (temp) {
+		temp->node->tick(DeltaTime);
+		temp = temp->next;
+	}
+
 
 	//if (windowPosition.x < 500 && switchways == -1) {
 	//	switchways = 1;
@@ -46,8 +55,6 @@ void Run::tick(float DeltaTime)
 	//win.setPosition(windowPosition);
 
 	//std::cout << windowPosition.x << "\n";
-
-
 }
 
 void Run::render(RenderWindow& win)
@@ -56,10 +63,10 @@ void Run::render(RenderWindow& win)
 
 	if (headNode) {
 		MasterNodeLList* tempNode = headNode;
-		do {
-			tempNode->node.render(win);
+		while (tempNode){
+			tempNode->node->render(win);
 			tempNode = tempNode->next;
-		} while (tempNode);
+		}
 	}
 
 }
@@ -68,13 +75,13 @@ void Run::addNode(Vector2f pos)
 {
 	//std::cout << "add node called\n";
 
-	Node newNode(pos);
+	Node* newNode = new Node(pos);
 
 	MasterNodeLList* newLLNode = new MasterNodeLList(newNode);
 
 	if (!headNode) {
 		headNode = newLLNode;
-		quadtree.addNode(newLLNode->node);
+		quadtree.addNode(*newLLNode->node);
 		return;
 	}
 
@@ -86,11 +93,35 @@ void Run::addNode(Vector2f pos)
 
 	temp->next = newLLNode;
 
-	quadtree.addNode(newLLNode->node);
+	quadtree.addNode(*newLLNode->node);
+}
 
+void Run::addBouncingNode(Vector2f pos)
+{
+	BouncingNode* newNode = new BouncingNode(pos);
+
+	MasterNodeLList* newLLNode = new MasterNodeLList(newNode);
+
+	if (!headNode) {
+		headNode = newLLNode;
+		quadtree.addNode(*newLLNode->node);
+		return;
+	}
+
+	MasterNodeLList* temp = headNode;
+
+	while (temp->next) {
+		temp = temp->next;
+	}
+
+	temp->next = newLLNode;
+
+	quadtree.addNode(*newLLNode->node);
 }
 
 void Run::mousePressed(Vector2f location)
 {
-	addNode(location);
+	//addNode(location);
+	addBouncingNode(location);
+
 }

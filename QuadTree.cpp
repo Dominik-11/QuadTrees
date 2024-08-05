@@ -41,25 +41,25 @@ void QuadTree::setBoundary(Vector2f loc, Vector2f size)
 	visualBoundary.setSize(size);
 }
 
-void QuadTree::addNode(Node & newNode)
+bool QuadTree::addNode(Node & newNode)
 {
-	std::cout << "add node\n";
+	//std::cout << "add node\n";
 
 	if (!boundary.contains(newNode.location)) {
-		return;
+		return false;
 	}
 
 	if (treeSubdivided) {
 		addNodeToSubdivision(newNode);
-		return;
+		return true;
 	}
 
 	NodeLList* newLLNode = new NodeLList(newNode);
 
 	if (!headNode) {
-		std::cout << "added to head\n";
+		//std::cout << "added to head\n";
 		headNode = newLLNode;
-		return;
+		return true;
 	}
 
 	NodeLList* temp = headNode;
@@ -72,7 +72,7 @@ void QuadTree::addNode(Node & newNode)
 
 	if (LCount > capacity) {
 
-		std::cout << "count was " << LCount << "\n";
+		//std::cout << "count was " << LCount << "\n";
 
 		subdivide();
 
@@ -81,19 +81,34 @@ void QuadTree::addNode(Node & newNode)
 			addNodeToSubdivision(temp->node);
 			temp = temp->next;
 		}
-		headNode->~NodeLList();
+		delete headNode;
 		headNode = nullptr;
 
 		addNodeToSubdivision(newNode);
-		return;
+		return true;
 	}
 
 	temp->next = newLLNode;
 }
 
+void QuadTree::updateTree()
+{
+	//delete all subtrees
+
+	//if (treeSubdivided) {
+	//	northWest->updateTree();
+	//	northEast->updateTree();
+	//	southWest->updateTree();
+	//	southEast->updateTree();
+	//}
+
+
+
+}
+
 void QuadTree::subdivide()
 {
-	std::cout << "subdivide!\n";
+	//std::cout << "subdivide!\n";
 
 	Vector2f size = Vector2f(boundary.getSize().x / 2, boundary.getSize().y / 2);
 
@@ -120,12 +135,15 @@ void QuadTree::addNodeToSubdivision(Node& newNode)
 		return;
 	}
 
-	std::cout << "added to subtree\n";
+	//std::cout << "added to subtree\n";
 
-	northWest->addNode(newNode);
-	northEast->addNode(newNode);
-	southWest->addNode(newNode);
-	southEast->addNode(newNode);
+	if (northWest->addNode(newNode) ||
+		northEast->addNode(newNode) ||
+		southWest->addNode(newNode) ||
+		southEast->addNode(newNode)) 
+	{
+		return;
+	}
 }
 
 QuadTree::~QuadTree()

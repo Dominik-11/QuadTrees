@@ -29,7 +29,9 @@ public:
 
 	void setBoundary(Vector2f boundaryLocation, Vector2f boundarySize);
 
-	void addNode(Node & newNode);
+	bool addNode(Node & newNode);
+
+	void updateTree();
 
 protected:
 

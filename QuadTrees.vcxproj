@@ -139,12 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BouncingNode.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Run.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BouncingNode.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Run.h" />

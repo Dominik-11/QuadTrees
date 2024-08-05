@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
+#include <iostream>
 
 using namespace sf;
 
@@ -11,7 +12,7 @@ public:
 
 	void init();
 
-	void tick();
+	virtual void tick(float dt);
 
 	void render(RenderWindow& window);
 

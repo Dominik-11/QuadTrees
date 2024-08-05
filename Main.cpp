@@ -19,7 +19,7 @@ int main() {
 	Mouse mouse;
 
 	bool mouseDown = false;
-	float mouseDrawIntervalTime = 0.05f;
+	float mouseDrawIntervalTime = 0.1f;
 	float mouseDrawInterval = 0.f;
 
 	while (window.isOpen()) {
@@ -31,11 +31,11 @@ int main() {
 				return 0;
 			case Event::MouseButtonPressed:
 				mouseDown = true;
-				std::cout << "pressed\n";
+				//std::cout << "pressed\n";
 				break;
 			case Event::MouseButtonReleased:
 				mouseDown = false;
-				std::cout << "released\n";
+				//std::cout << "released\n";
 				break;
 			}
 		}
