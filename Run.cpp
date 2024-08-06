@@ -19,15 +19,43 @@ void Run::init(RenderWindow& win)
 
 	//std::cout << "bloody something!\n";
 
-	//addNode(Vector2f(300, 200));
-	//addNode(Vector2f(400, 400));
-	//addNode(Vector2f(70, 770));
-	//addNode(Vector2f(770, 200));
+	addNode(Vector2f(300, 200));
+	addNode(Vector2f(400, 400));
+	addNode(Vector2f(70, 770));
+	addNode(Vector2f(770, 200));
 
-	//addNode(Vector2f(310, 210));
-	//addNode(Vector2f(410, 410));
-	//addNode(Vector2f(80, 710));
-	//addNode(Vector2f(780, 210));
+	addNode(Vector2f(310, 210));
+	addNode(Vector2f(410, 410));
+	addNode(Vector2f(80, 710));
+	addNode(Vector2f(780, 210));
+
+	boundary.setPosition(bpos);
+	boundary.setSize(bsize);
+	boundary.setFillColor(Color::Transparent);
+	boundary.setOutlineThickness(1.f);
+	boundary.setOutlineColor(Color::Red);
+
+	FloatRect rect;
+	rect.left = bpos.x;
+	rect.top = bpos.y;
+	rect.width = bsize.x;
+	rect.height = bsize.y;
+
+	NodeLList* queryListHead = quadtree.query(rect);
+
+	if (queryListHead) {
+		std::cout << queryListHead->node.location.x << ", " << queryListHead->node.location.y << "\n";
+		//queryListHead->node.visualNode.setFillColor(Color::Red);
+	}
+	else {
+		return;
+	}
+
+	while (queryListHead->next) {
+		queryListHead = queryListHead->next;
+		std::cout << queryListHead->node.location.x << ", " << queryListHead->node.location.y << "\n";
+		//queryListHead->node.visualNode.setFillColor(Color::Red);
+	}
 
 	//addBouncingNode(Vector2f(780, 210));
 }
@@ -68,6 +96,8 @@ void Run::render(RenderWindow& win)
 			tempNode = tempNode->next;
 		}
 	}
+
+	win.draw(boundary);
 
 }
 
@@ -121,7 +151,7 @@ void Run::addBouncingNode(Vector2f pos)
 
 void Run::mousePressed(Vector2f location)
 {
-	//addNode(location);
-	addBouncingNode(location);
+	addNode(location);
+	//addBouncingNode(location);
 
 }

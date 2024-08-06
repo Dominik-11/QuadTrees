@@ -48,7 +48,11 @@ protected:
 	QuadTree quadtree;
 	MasterNodeLList* headNode = nullptr;
 
-	Node* nodes[];
+	//Node* nodes[];
+
+	RectangleShape boundary;
+	Vector2f bsize = Vector2f(300, 300);
+	Vector2f bpos = Vector2f(180, 180);
 
 };
 

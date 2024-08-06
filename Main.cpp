@@ -19,7 +19,7 @@ int main() {
 	Mouse mouse;
 
 	bool mouseDown = false;
-	float mouseDrawIntervalTime = 0.1f;
+	float mouseDrawIntervalTime = 0.05f;
 	float mouseDrawInterval = 0.f;
 
 	while (window.isOpen()) {

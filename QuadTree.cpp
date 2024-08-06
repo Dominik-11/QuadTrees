@@ -102,8 +102,45 @@ void QuadTree::updateTree()
 	//	southEast->updateTree();
 	//}
 
+}
 
+NodeLList* QuadTree::query(FloatRect queryBounds)
+{
+	if (!boundary.intersects(queryBounds)) {
+		return nullptr;
+	}
 
+	//if not subdevided ypure at the end, grab the nodes and leave
+	if (!treeSubdivided) {
+		return headNode;
+	}
+
+	NodeLList* nodesFound = nullptr;
+
+	//recurse to next layer
+	NodeLList* foundNodes[4];
+
+	foundNodes[0] = northWest->query(queryBounds);
+	foundNodes[1] = northEast->query(queryBounds);
+	foundNodes[2] = southWest->query(queryBounds);
+	foundNodes[3] = southEast->query(queryBounds);
+
+	for (NodeLList* foundList : foundNodes) {
+		if (foundList) {
+			if (!nodesFound) {
+				nodesFound = foundList;
+			}
+			else {
+				NodeLList* temp = nodesFound;
+				while (temp->next) {
+					temp = temp->next;
+				}
+				temp->next = foundList;
+			}
+		}
+	}
+
+	return nodesFound;
 }
 
 void QuadTree::subdivide()

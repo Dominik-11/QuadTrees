@@ -12,9 +12,10 @@ struct NodeLList {
 
 	NodeLList(Node &newNode) : node(newNode) {}
 
-	~NodeLList() {
-		delete next;
-	}
+	//becuse this is just a local list with references, when it goes out of scope it doesnt matter
+	//~NodeLList() {
+	//	delete next;
+	//}
 };
 
 class QuadTree
@@ -32,6 +33,8 @@ public:
 	bool addNode(Node & newNode);
 
 	void updateTree();
+
+	NodeLList* query(FloatRect queryBounds);
 
 protected:
 
