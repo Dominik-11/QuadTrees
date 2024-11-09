@@ -19,15 +19,25 @@ void Run::init(RenderWindow& win)
 
 	//std::cout << "bloody something!\n";
 
-	addNode(Vector2f(300, 200));
-	addNode(Vector2f(400, 400));
-	addNode(Vector2f(70, 770));
-	addNode(Vector2f(770, 200));
+	//addNewNode(Vector2f(300, 200));
+	//addNewNode(Vector2f(400, 400));
+	//addNewNode(Vector2f(70, 770));
+	//addNewNode(Vector2f(770, 200));
 
-	addNode(Vector2f(310, 210));
-	addNode(Vector2f(410, 410));
-	addNode(Vector2f(80, 710));
-	addNode(Vector2f(780, 210));
+	//addNewNode(Vector2f(310, 210));
+	//addNewNode(Vector2f(410, 410));
+	//addNewNode(Vector2f(80, 710));
+	//addNewNode(Vector2f(780, 210));
+
+	addNewBouncingNode(Vector2f(300, 200));
+	addNewBouncingNode(Vector2f(400, 400));
+	addNewBouncingNode(Vector2f(70, 770));
+	addNewBouncingNode(Vector2f(770, 200));
+
+	addNewBouncingNode(Vector2f(310, 210));
+	addNewBouncingNode(Vector2f(410, 410));
+	addNewBouncingNode(Vector2f(80, 710));
+	addNewBouncingNode(Vector2f(780, 210));
 
 	boundary.setPosition(bpos);
 	boundary.setSize(bsize);
@@ -35,41 +45,43 @@ void Run::init(RenderWindow& win)
 	boundary.setOutlineThickness(1.f);
 	boundary.setOutlineColor(Color::Red);
 
-	FloatRect rect;
-	rect.left = bpos.x;
-	rect.top = bpos.y;
-	rect.width = bsize.x;
-	rect.height = bsize.y;
+	//FloatRect rect;
+	//rect.left = bpos.x;
+	//rect.top = bpos.y;
+	//rect.width = bsize.x;
+	//rect.height = bsize.y;
 
-	NodeLList* queryListHead = quadtree.query(rect);
+	//NodeLList* queryListHead = quadtree.query(rect);
 
-	if (queryListHead) {
-		std::cout << queryListHead->node.location.x << ", " << queryListHead->node.location.y << "\n";
-		//queryListHead->node.visualNode.setFillColor(Color::Red);
-	}
-	else {
-		return;
-	}
+	//if (queryListHead) {
+	//	std::cout << queryListHead->node.location.x << ", " << queryListHead->node.location.y << "\n";
+	//	queryListHead->node.visualNode.setFillColor(Color::Red);
+	//}
+	//else {
+	//	return;
+	//}
 
-	while (queryListHead->next) {
-		queryListHead = queryListHead->next;
-		std::cout << queryListHead->node.location.x << ", " << queryListHead->node.location.y << "\n";
-		//queryListHead->node.visualNode.setFillColor(Color::Red);
-	}
+	//while (queryListHead->next) {
+	//	queryListHead = queryListHead->next;
+	//	std::cout << queryListHead->node.location.x << ", " << queryListHead->node.location.y << "\n";
+	//	queryListHead->node.visualNode.setFillColor(Color::Red);
+	//}
 
 	//addBouncingNode(Vector2f(780, 210));
 }
 
 void Run::tick(float DeltaTime)
 {
+	quadtree.reset();
 
 	MasterNodeLList* temp = headNode;
 
-	//theres an issue you shouldnt access a child from the parent. i want some kind of ability to call the right tick depending on the class
 	while (temp) {
 		temp->node->tick(DeltaTime);
+		quadtree.addNode(*temp->node);
 		temp = temp->next;
 	}
+	
 
 
 	//if (windowPosition.x < 500 && switchways == -1) {
@@ -97,11 +109,11 @@ void Run::render(RenderWindow& win)
 		}
 	}
 
-	win.draw(boundary);
+	//win.draw(boundary);
 
 }
 
-void Run::addNode(Vector2f pos)
+void Run::addNewNode(Vector2f pos)
 {
 	//std::cout << "add node called\n";
 
@@ -126,7 +138,7 @@ void Run::addNode(Vector2f pos)
 	quadtree.addNode(*newLLNode->node);
 }
 
-void Run::addBouncingNode(Vector2f pos)
+void Run::addNewBouncingNode(Vector2f pos)
 {
 	BouncingNode* newNode = new BouncingNode(pos);
 
@@ -151,7 +163,7 @@ void Run::addBouncingNode(Vector2f pos)
 
 void Run::mousePressed(Vector2f location)
 {
-	addNode(location);
+	addNewNode(location);
 	//addBouncingNode(location);
 
 }

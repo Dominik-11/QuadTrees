@@ -9,13 +9,15 @@ using namespace sf;
 struct NodeLList {
 	Node &node;
 	NodeLList *next = nullptr;
+	//std::unique_ptr<NodeLList> next = nullptr;
 
 	NodeLList(Node &newNode) : node(newNode) {}
 
 	//becuse this is just a local list with references, when it goes out of scope it doesnt matter
-	//~NodeLList() {
-	//	delete next;
-	//}
+	//i might want this tbh
+	~NodeLList() {
+		delete next;
+	}
 };
 
 class QuadTree
@@ -34,7 +36,10 @@ public:
 
 	void updateTree();
 
+	//std::unique_ptr<NodeLList> query(FloatRect queryBounds);
 	NodeLList* query(FloatRect queryBounds);
+
+	void reset();
 
 protected:
 
@@ -47,12 +52,19 @@ protected:
 
 	int capacity;
 
-	QuadTree* northWest = nullptr;
-	QuadTree* northEast = nullptr;
-	QuadTree* southWest = nullptr;
-	QuadTree* southEast = nullptr;
+	std::unique_ptr<QuadTree> northWest = nullptr;
+	std::unique_ptr<QuadTree> northEast = nullptr;
+	std::unique_ptr<QuadTree> southWest = nullptr;
+	std::unique_ptr<QuadTree> southEast = nullptr;
 
-	NodeLList* headNode = nullptr;
+	std::unique_ptr<NodeLList> headNode = nullptr;
+
+	//QuadTree* northWest = nullptr;
+	//QuadTree* northEast = nullptr;
+	//QuadTree* southWest = nullptr;
+	//QuadTree* southEast = nullptr;
+
+	//NodeLList* headNode = nullptr;
 
 	bool treeSubdivided = false;
 

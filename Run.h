@@ -34,9 +34,9 @@ public:
 
 	void render(RenderWindow& win);
 
-	void addNode(Vector2f pos);
+	void addNewNode(Vector2f pos);
 
-	void addBouncingNode(Vector2f pos);
+	void addNewBouncingNode(Vector2f pos);
 
 	void mousePressed(Vector2f location);
 
@@ -52,7 +52,7 @@ protected:
 
 	RectangleShape boundary;
 	Vector2f bsize = Vector2f(300, 300);
-	Vector2f bpos = Vector2f(180, 180);
+	Vector2f bpos = Vector2f(180, 240);
 
 };
 

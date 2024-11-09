@@ -54,19 +54,25 @@ bool QuadTree::addNode(Node & newNode)
 		return true;
 	}
 
-	NodeLList* newLLNode = new NodeLList(newNode);
+	//NodeLList* newLLNode = new NodeLList(newNode);
+	//NodeLList* newLLNode = std::make_unique<NodeLList>(newNode);
+	// std::unique_ptr<NodeLList> newLLNode = std::make_unique<NodeLList>(newNode);
+	std::unique_ptr<NodeLList> newLLNode(new NodeLList(newNode));
 
 	if (!headNode) {
 		//std::cout << "added to head\n";
-		headNode = newLLNode;
+		//headNode = std::make_unique<NodeLList>(newNode);
+		headNode = std::move(newLLNode);
 		return true;
 	}
 
-	NodeLList* temp = headNode;
+	//std::unique_ptr<NodeLList> temp = std::make_unique<NodeLList>(headNode);
+	//std::unique_ptr<NodeLList> temp(headNode);
+	NodeLList* temp = headNode.get();
 
 	int LCount = 2;
 	while (temp->next) {
-		temp = temp->next;
+		temp = temp->next.get();
 		LCount++;
 	}
 
@@ -76,19 +82,20 @@ bool QuadTree::addNode(Node & newNode)
 
 		subdivide();
 
-		NodeLList* temp = headNode;
+		temp = headNode.get();
 		while (temp) {
 			addNodeToSubdivision(temp->node);
-			temp = temp->next;
+			temp = temp->next.get();
 		}
-		delete headNode;
-		headNode = nullptr;
+		//delete headNode;
+		//headNode = nullptr;
+		headNode.reset();
 
 		addNodeToSubdivision(newNode);
 		return true;
 	}
 
-	temp->next = newLLNode;
+	temp->next = std::move(newLLNode);
 }
 
 void QuadTree::updateTree()
@@ -112,7 +119,7 @@ NodeLList* QuadTree::query(FloatRect queryBounds)
 
 	//if not subdevided ypure at the end, grab the nodes and leave
 	if (!treeSubdivided) {
-		return headNode;
+		return headNode.get();
 	}
 
 	NodeLList* nodesFound = nullptr;
@@ -133,7 +140,7 @@ NodeLList* QuadTree::query(FloatRect queryBounds)
 			else {
 				NodeLList* temp = nodesFound;
 				while (temp->next) {
-					temp = temp->next;
+					temp = temp->next.get();
 				}
 				temp->next = foundList;
 			}
@@ -143,6 +150,24 @@ NodeLList* QuadTree::query(FloatRect queryBounds)
 	return nodesFound;
 }
 
+void QuadTree::reset()
+{
+	//delete all bar this one
+	//after adding this it started to work but theres a boy memory leak somewhere, i think its just fast cos its in tick
+
+
+	//if (treeSubdivided) {
+	//	delete northWest, northEast, southEast, southWest, headNode;
+	//	headNode = nullptr;
+	//	treeSubdivided = false;
+	//}
+
+	//if (treeSubdivided) {
+	//	delete northWest, northEast, southEast, southWest;
+	//	treeSubdivided = false;
+	//}
+}
+
 void QuadTree::subdivide()
 {
 	//std::cout << "subdivide!\n";
@@ -150,16 +175,20 @@ void QuadTree::subdivide()
 	Vector2f size = Vector2f(boundary.getSize().x / 2, boundary.getSize().y / 2);
 
 	Vector2f nwLoc = boundary.getPosition();
-	northWest = new QuadTree(nwLoc, size, capacity);
+	northWest = std::make_unique<QuadTree>(nwLoc, size, capacity);
+	//northWest = new QuadTree(nwLoc, size, capacity);
 
 	Vector2f neLoc = Vector2f(boundary.getPosition().x + (boundary.getSize().x / 2), boundary.getPosition().y);
-	northEast = new QuadTree(neLoc, size, capacity);
+	northEast = std::make_unique<QuadTree>(nwLoc, size, capacity);
+	//northEast = new QuadTree(neLoc, size, capacity);
 
 	Vector2f swLoc = Vector2f(boundary.getPosition().x, boundary.getPosition().y + (boundary.getSize().y / 2));
-	southWest = new QuadTree(swLoc, size, capacity);
+	southWest = std::make_unique<QuadTree>(nwLoc, size, capacity);
+	//southWest = new QuadTree(swLoc, size, capacity);
 
 	Vector2f seLoc = Vector2f(boundary.getPosition().x + (boundary.getSize().x / 2), boundary.getPosition().y + (boundary.getSize().y / 2));
-	southEast = new QuadTree(seLoc, size, capacity);
+	southEast = std::make_unique<QuadTree>(nwLoc, size, capacity);
+	//southEast = new QuadTree(seLoc, size, capacity);
 
 	treeSubdivided = true;
 }
@@ -185,5 +214,5 @@ void QuadTree::addNodeToSubdivision(Node& newNode)
 
 QuadTree::~QuadTree()
 {
-	delete northWest, northEast, southWest, southEast, headNode;
+	//delete northWest, northEast, southWest, southEast, headNode;
 }
